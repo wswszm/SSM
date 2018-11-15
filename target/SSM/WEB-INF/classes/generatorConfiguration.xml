@@ -61,9 +61,5 @@
             <!-- 数据库表主键 -->
             <generatedKey column="id" sqlStatement="Mysql" identity="true" />
         </table>
-        <table tableName="sys_res_path" domainObjectName="SysResPath">
-            <!-- 数据库表主键 -->
-            <generatedKey column="id" sqlStatement="Mysql" identity="true" />
-        </table>
     </context>
 </generatorConfiguration>

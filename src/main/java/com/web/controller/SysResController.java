@@ -3,9 +3,7 @@ package com.web.controller;
 import com.common.base.contants.Constants;
 import com.common.uitls.DownloadUtils;
 import com.web.dao.SysResPathMapper;
-import com.web.entity.LoginUser;
-import com.web.entity.SysRes;
-import com.web.entity.SysResPath;
+import com.web.entity.*;
 import com.web.service.SysResService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,17 +37,20 @@ public class SysResController {
     @Autowired
     private SysResService sysResService;
 
-    @RequestMapping("save")
+    /*@RequestMapping("save")
     @ResponseBody
     public Map<String, Object> save(HttpServletRequest request,@RequestBody SysRes res, MultipartFile file, MultipartFile imgFile) {
         res.setCreatorId(getLoginUserId(request));
         return sysResService.save(file, request);
-    }
+    }*/
 
     @RequestMapping("selectListByCreateorId")
     @ResponseBody
-    public Map<String, Object> selectListByCreateorId(HttpServletRequest request, @RequestBody SysRes res, Integer pageNo, Integer pageSize) {
-        res.setCreatorId(getLoginUserId(request));
+    public Map<String, Object> selectListByCreateorId(HttpServletRequest request,
+                                                      @RequestBody SysRes res,
+                                                      @RequestParam(value = "pageNo",required = false) Integer pageNo,
+                                                      @RequestParam(value = "pageSize", required = false) Integer pageSize) {
+        //res.setCreatorId(getLoginUserId(request));
         return sysResService.selectList(res, pageNo, pageSize);
     }
     @RequestMapping("selectList")
@@ -61,7 +62,7 @@ public class SysResController {
     @RequestMapping("update")
     @ResponseBody
     public Map<String, Object> update(HttpServletRequest request,@RequestBody SysRes res) {
-        res.setCreatorId(getLoginUserId(request));
+        //res.setCreatorId(getLoginUserId(request));
         return sysResService.update(res, request);
     }
    /* @RequestMapping("upload")
@@ -73,18 +74,18 @@ public class SysResController {
     }*/
     @RequestMapping("saveResRef")
     @ResponseBody
-    public Map<String, Object> saveResRef(HttpServletRequest request, Integer questionId, String resIds, String questionName, String content){
-        return sysResService.saveResRef(getLoginUserId(request), resIds, questionName, content, questionId);
+    public Map<String, Object> saveResRef(@RequestBody SysResRefSaveDto dto){
+        return sysResService.saveResRef(dto.getUserId(), dto.getResIds(), dto.getQuestionName(), dto.getContent(), dto.getQuestionId());
     }
     @RequestMapping("findResRefList")
     @ResponseBody
-    public Map<String, Object> findResRefList(HttpServletRequest request, String questionName,Integer pageNo, Integer pageSize){
-        return sysResService.findResRefList(getLoginUserId(request), questionName, pageNo, pageSize);
+    public Map<String, Object> findResRefList(@RequestBody findResRefDto dto){
+        return sysResService.findResRefList(dto.getUserId(), dto.getQuestionName(), dto.getPageNo(), dto.getPageSize());
     }
     @RequestMapping("delQuestion")
     @ResponseBody
-    public Map<String, Object> delQuestion(HttpServletRequest request, Integer questionId){
-        return sysResService.delQuestion(getLoginUserId(request), questionId);
+    public Map<String, Object> delQuestion(Integer userId, Integer questionId){
+        return sysResService.delQuestion(userId, questionId);
     }
     @RequestMapping("upload")
     @ResponseBody
@@ -94,7 +95,7 @@ public class SysResController {
     @RequestMapping("saveRes")
     @ResponseBody
     public Map<String, Object> saveRes(@RequestBody SysRes res, HttpServletRequest request){
-        res.setCreatorId(getLoginUserId(request));
+        //res.setCreatorId(getLoginUserId(request));
         res.setAuditStatus("0");
         res.setIsDel("0");
         return sysResService.saveRes(res);

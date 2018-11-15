@@ -1,5 +1,6 @@
 package com.web.service.impl;
 
+import com.alibaba.druid.util.StringUtils;
 import com.common.base.contants.Constants;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -143,6 +144,9 @@ public class SysResServiceImpl implements SysResService {
         Map<String, Object> result = new HashMap<>();
         SysQuestion sysQuestion = new SysQuestion();
         sysQuestion.setCreateBy(loginUserId);
+        if(!StringUtils.isEmpty(questionName)){
+            sysQuestion.setQuestionName(questionName);
+        }
         sysQuestion.setIsDel("0");
         if(pageNo == null) pageNo = 1;
         if( pageSize == null ) pageSize = Integer.MAX_VALUE;
@@ -161,6 +165,7 @@ public class SysResServiceImpl implements SysResService {
                 resList.add(sysResMapper.selectByPrimaryKey(r.getResId()));
             });
             vo.setResList(resList);
+            voList.add(vo);
         });
         Map<String, Object> data = new HashMap<>();
         data.put("voList",voList);
@@ -189,7 +194,7 @@ public class SysResServiceImpl implements SysResService {
     }
 
     @Override
-    public SysResPath getResPath(String id) {
+    public SysResPath getResPath(Integer id) {
         return sysResPathMapper.selectByPrimaryKey(id);
     }
 

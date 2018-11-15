@@ -31,7 +31,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        for(String uri : uris){
+        /*for(String uri : uris){
             if(request.getRequestURI().indexOf(uri) > 0){
                 return true;
             }
@@ -57,7 +57,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                 }
             }
             return false;
-        }
+        }*/
         return true;
     }
 
