@@ -13,10 +13,10 @@ public class SysRes implements Serializable {
     private String resName;
 
     @Column(name = "img_path_id")
-    private String imgPathId;
+    private Integer imgPathId;
 
     @Column(name = "res_path_id")
-    private String resPathId;
+    private Integer resPathId;
 
     /**
      * 1 word 2 ppt 3 video 
@@ -81,29 +81,29 @@ public class SysRes implements Serializable {
     /**
      * @return img_path_id
      */
-    public String getImgPathId() {
+    public Integer getImgPathId() {
         return imgPathId;
     }
 
     /**
      * @param imgPathId
      */
-    public void setImgPathId(String imgPathId) {
-        this.imgPathId = imgPathId == null ? null : imgPathId.trim();
+    public void setImgPathId(Integer imgPathId) {
+        this.imgPathId = imgPathId;
     }
 
     /**
      * @return res_path_id
      */
-    public String getResPathId() {
+    public Integer getResPathId() {
         return resPathId;
     }
 
     /**
      * @param resPathId
      */
-    public void setResPathId(String resPathId) {
-        this.resPathId = resPathId == null ? null : resPathId.trim();
+    public void setResPathId(Integer resPathId) {
+        this.resPathId = resPathId;
     }
 
     /**

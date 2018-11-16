@@ -22,7 +22,7 @@ public interface SysResService {
 
     SysRes get(String id);
 
-    SysResPath getResPath(String id);
+    SysResPath getResPath(Integer id);
 
     Map<String, Object> saveRes(SysRes res);
 }
