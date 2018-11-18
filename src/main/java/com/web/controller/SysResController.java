@@ -120,4 +120,9 @@ public class SysResController {
                 filePathList.toArray(new String[filePathList.size()]));
         return ;
     }
+    @RequestMapping("getStatisticsByDay")
+    @ResponseBody
+    public Map<String, Object> getStatisticsByDay(){
+        return sysResService.getStatisticsByDay();
+    }
 }

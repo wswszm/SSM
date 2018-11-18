@@ -4,10 +4,7 @@ import com.alibaba.druid.util.StringUtils;
 import com.common.base.contants.Constants;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.web.dao.QuestionResRefMapper;
-import com.web.dao.SysQuestionMapper;
-import com.web.dao.SysResMapper;
-import com.web.dao.SysResPathMapper;
+import com.web.dao.*;
 import com.web.entity.*;
 import com.web.service.SysResService;
 import com.web.vo.QuestionVo;
@@ -37,6 +34,8 @@ public class SysResServiceImpl implements SysResService {
     private SysQuestionMapper sysQuestionMapper;
     @Resource
     private QuestionResRefMapper questionResRefMapper;
+    @Resource
+    private StatisticsMapper statisticsMapper;
 
     @Override
     public Map<String, Object> save(MultipartFile file, HttpServletRequest request) {
@@ -81,7 +80,7 @@ public class SysResServiceImpl implements SysResService {
         if(pageSize == null){
             pageSize = Integer.MAX_VALUE;
         }
-        PageHelper.startPage(pageNo,pageSize);
+        PageHelper.startPage(pageNo,pageSize, "create_date desc");
         List<SysRes> resList = sysResMapper.select(res);
         PageInfo<SysRes> pageInfo = new PageInfo<SysRes>(resList);
         List<ResVo> voList = new ArrayList<>();
@@ -105,7 +104,7 @@ public class SysResServiceImpl implements SysResService {
     @Override
     public Map<String, Object> update(SysRes res, HttpServletRequest request) {
         Map<String, Object> result = new HashMap<>();
-        sysResMapper.updateByPrimaryKey(res);
+        sysResMapper.updateByPrimaryKeySelective(res);
         result.put("code","200");
         result.put("message","成功");
         return result;
@@ -120,7 +119,8 @@ public class SysResServiceImpl implements SysResService {
             question.setCreateBy(loginUserId);
             question.setIsDel("0");
             question.setQuestionName(questionName);
-            sysQuestionMapper.insert(question);
+            question.setCreateDate(new Date());
+            sysQuestionMapper.insertSelective(question);
             questionId = question.getId();
         }
         QuestionResRef questionResRef = new QuestionResRef();
@@ -150,7 +150,7 @@ public class SysResServiceImpl implements SysResService {
         sysQuestion.setIsDel("0");
         if(pageNo == null) pageNo = 1;
         if( pageSize == null ) pageSize = Integer.MAX_VALUE;
-        PageHelper.startPage(pageNo,pageSize);
+        PageHelper.startPage(pageNo,pageSize,"create_date desc");
         List<SysQuestion> list = sysQuestionMapper.select(sysQuestion);
         PageInfo<SysQuestion> pageInfo = new PageInfo<SysQuestion>(list);
         List<QuestionVo> voList = new ArrayList<>();
@@ -160,9 +160,14 @@ public class SysResServiceImpl implements SysResService {
             QuestionResRef ref = new QuestionResRef();
             ref.setQuestionId(question.getId());
             List<QuestionResRef> refList = questionResRefMapper.select(ref);
-            List<SysRes> resList = new ArrayList<>();
+            List<Map<String, Object>> resList = new ArrayList<>();
             refList.forEach(r->{
-                resList.add(sysResMapper.selectByPrimaryKey(r.getResId()));
+                Map<String, Object> map = new HashMap<>();
+                SysRes res = sysResMapper.selectByPrimaryKey(r.getResId());
+                map.put("sysRes", res);
+                map.put("resPath", sysResPathMapper.selectByPrimaryKey(res.getResPathId()));
+                map.put("imgPath", sysResPathMapper.selectByPrimaryKey(res.getImgPathId()));
+                resList.add(map);
             });
             vo.setResList(resList);
             voList.add(vo);
@@ -182,7 +187,7 @@ public class SysResServiceImpl implements SysResService {
         SysQuestion question = new SysQuestion();
         question.setId(questionId);
         question.setIsDel("1");
-        sysQuestionMapper.updateByPrimaryKey(question);
+        sysQuestionMapper.updateByPrimaryKeySelective(question);
         result.put("code","200");
         result.put("message","成功");
         return result;
@@ -204,6 +209,31 @@ public class SysResServiceImpl implements SysResService {
         sysResMapper.insertSelective(res);
         result.put("code","200");
         result.put("message","成功");
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> getStatisticsByDay() {
+        Map<String, Object> result = new HashMap<>();
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date());
+        int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
+        if(dayOfWeek == 1){
+            dayOfWeek = 7;
+        }
+        c.add(Calendar.DATE, -dayOfWeek + 1);
+        List<Map<String, Object>> resultList = new ArrayList<>();
+        for(int i = 1; i <= 7; i++){
+            Map<String, Object>map = new HashMap<>();
+            String date = new SimpleDateFormat("yyyy-MM-dd").format(c.getTime());
+            map.put("date", date);
+            map.put("count", statisticsMapper.getCountByDay(date));
+            resultList.add(map);
+            c.add(Calendar.DATE , 1);
+        }
+        result.put("code","200");
+        result.put("message","成功");
+        result.put("resultList",resultList);
         return result;
     }
 }

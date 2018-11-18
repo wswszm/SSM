@@ -25,4 +25,6 @@ public interface SysResService {
     SysResPath getResPath(Integer id);
 
     Map<String, Object> saveRes(SysRes res);
+
+    Map<String, Object> getStatisticsByDay();
 }

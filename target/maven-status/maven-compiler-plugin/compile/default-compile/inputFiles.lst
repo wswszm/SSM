@@ -24,6 +24,7 @@
 /Users/zhaomeng/Documents/SSM/src/main/java/com/web/entity/SysRes.java
 /Users/zhaomeng/Documents/SSM/src/main/java/com/common/base/exception/BaseBusinessException.java
 /Users/zhaomeng/Documents/SSM/src/main/java/com/common/base/contants/Constants.java
+/Users/zhaomeng/Documents/SSM/src/main/java/com/web/dao/StatisticsMapper.java
 /Users/zhaomeng/Documents/SSM/src/main/java/com/web/controller/UserController.java
 /Users/zhaomeng/Documents/SSM/src/main/java/com/web/service/impl/SysUserRoleServiceImpl.java
 /Users/zhaomeng/Documents/SSM/src/main/java/com/web/dao/QuestionResRefMapper.java
