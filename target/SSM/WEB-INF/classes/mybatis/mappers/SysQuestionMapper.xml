@@ -1,14 +1,15 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.web.dao.SysQuestionMapper" >
-  <resultMap id="BaseResultMap" type="com.web.entity.SysQuestion" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.web.dao.SysQuestionMapper">
+  <resultMap id="BaseResultMap" type="com.web.entity.SysQuestion">
     <!--
       WARNING - @mbg.generated
     -->
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="question_name" property="questionName" jdbcType="VARCHAR" />
-    <result column="content" property="content" jdbcType="VARCHAR" />
-    <result column="create_by" property="createBy" jdbcType="INTEGER" />
-    <result column="is_del" property="isDel" jdbcType="CHAR" />
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="question_name" jdbcType="VARCHAR" property="questionName" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="create_by" jdbcType="INTEGER" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="is_del" jdbcType="CHAR" property="isDel" />
   </resultMap>
 </mapper>

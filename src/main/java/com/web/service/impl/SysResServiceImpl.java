@@ -217,19 +217,14 @@ public class SysResServiceImpl implements SysResService {
         Map<String, Object> result = new HashMap<>();
         Calendar c = Calendar.getInstance();
         c.setTime(new Date());
-        int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
-        if(dayOfWeek == 1){
-            dayOfWeek = 7;
-        }
-        c.add(Calendar.DATE, -dayOfWeek + 1);
         List<Map<String, Object>> resultList = new ArrayList<>();
-        for(int i = 1; i <= 7; i++){
+        for(int i = 1; i <= 30; i++){
             Map<String, Object>map = new HashMap<>();
             String date = new SimpleDateFormat("yyyy-MM-dd").format(c.getTime());
             map.put("date", date);
             map.put("count", statisticsMapper.getCountByDay(date));
             resultList.add(map);
-            c.add(Calendar.DATE , 1);
+            c.add(Calendar.DATE , -1);
         }
         result.put("code","200");
         result.put("message","成功");
