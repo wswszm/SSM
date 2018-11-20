@@ -16,7 +16,7 @@ public interface SysResService {
 
     Map<String, Object> saveResRef(Integer userId, String resIds, String questionName, String content,Integer questionId);
 
-    Map<String, Object> findResRefList(Integer loginUserId, String questionName, Integer pageNo, Integer pageSize);
+    Map<String, Object> findResRefList(Integer loginUserId, String questionName, Integer pageNo, Integer pageSize, String isDel);
 
     Map<String, Object> delQuestion(Integer loginUserId, Integer questionId);
 

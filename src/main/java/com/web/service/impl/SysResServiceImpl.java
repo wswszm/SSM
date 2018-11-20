@@ -140,14 +140,21 @@ public class SysResServiceImpl implements SysResService {
     }
 
     @Override
-    public Map<String, Object> findResRefList(Integer loginUserId, String questionName, Integer pageNo, Integer pageSize) {
+    public Map<String, Object> findResRefList(Integer loginUserId, String questionName, Integer pageNo, Integer pageSize, String isDel) {
         Map<String, Object> result = new HashMap<>();
         SysQuestion sysQuestion = new SysQuestion();
-        sysQuestion.setCreateBy(loginUserId);
+        if(loginUserId != null){
+            sysQuestion.setCreateBy(loginUserId);
+        }
         if(!StringUtils.isEmpty(questionName)){
             sysQuestion.setQuestionName(questionName);
         }
-        sysQuestion.setIsDel("0");
+        if(StringUtils.isEmpty(isDel)){
+            sysQuestion.setIsDel("0");
+        }else{
+            sysQuestion.setIsDel(isDel);
+        }
+
         if(pageNo == null) pageNo = 1;
         if( pageSize == null ) pageSize = Integer.MAX_VALUE;
         PageHelper.startPage(pageNo,pageSize,"create_date desc");
@@ -164,9 +171,11 @@ public class SysResServiceImpl implements SysResService {
             refList.forEach(r->{
                 Map<String, Object> map = new HashMap<>();
                 SysRes res = sysResMapper.selectByPrimaryKey(r.getResId());
-                map.put("sysRes", res);
-                map.put("resPath", sysResPathMapper.selectByPrimaryKey(res.getResPathId()));
-                map.put("imgPath", sysResPathMapper.selectByPrimaryKey(res.getImgPathId()));
+                if(res != null){
+                    map.put("sysRes", res);
+                    map.put("resPath", sysResPathMapper.selectByPrimaryKey(res.getResPathId()));
+                    map.put("imgPath", sysResPathMapper.selectByPrimaryKey(res.getImgPathId()));
+                }
                 resList.add(map);
             });
             vo.setResList(resList);

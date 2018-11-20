@@ -80,7 +80,7 @@ public class SysResController {
     @RequestMapping("findResRefList")
     @ResponseBody
     public Map<String, Object> findResRefList(@RequestBody findResRefDto dto){
-        return sysResService.findResRefList(dto.getUserId(), dto.getQuestionName(), dto.getPageNo(), dto.getPageSize());
+        return sysResService.findResRefList(dto.getUserId(), dto.getQuestionName(), dto.getPageNo(), dto.getPageSize(),dto.getIsDel());
     }
     @RequestMapping("delQuestion")
     @ResponseBody

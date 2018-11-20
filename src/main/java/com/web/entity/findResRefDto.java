@@ -10,6 +10,7 @@ public class findResRefDto {
     private String questionName;
     private Integer pageNo;
     private Integer pageSize;
+    private String isDel;
 
     public Integer getUserId() {
         return userId;
@@ -41,5 +42,13 @@ public class findResRefDto {
 
     public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
+    }
+
+    public String getIsDel() {
+        return isDel;
+    }
+
+    public void setIsDel(String isDel) {
+        this.isDel = isDel;
     }
 }
