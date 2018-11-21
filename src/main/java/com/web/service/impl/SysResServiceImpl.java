@@ -191,10 +191,8 @@ public class SysResServiceImpl implements SysResService {
     }
 
     @Override
-    public Map<String, Object> delQuestion(Integer loginUserId, Integer questionId) {
+    public Map<String, Object> delQuestion(SysQuestion question) {
         Map<String, Object> result = new HashMap<>();
-        SysQuestion question = new SysQuestion();
-        question.setId(questionId);
         question.setIsDel("1");
         sysQuestionMapper.updateByPrimaryKeySelective(question);
         result.put("code","200");
@@ -203,7 +201,7 @@ public class SysResServiceImpl implements SysResService {
     }
 
     @Override
-    public SysRes get(String id) {
+    public SysRes get(Integer id) {
         return sysResMapper.selectByPrimaryKey(id);
     }
 
@@ -239,5 +237,11 @@ public class SysResServiceImpl implements SysResService {
         result.put("message","成功");
         result.put("resultList",resultList);
         return result;
+    }
+
+    @Override
+    public List<QuestionResRef> findList(QuestionResRef questionResRef) {
+
+        return questionResRefMapper.select(questionResRef);
     }
 }

@@ -48,17 +48,26 @@ public class DownloadUtils {
         byte[] buffer = new byte[1024];
         Date date = new Date();
         //生成zip文件存放位置
-        String strZipPath = Constants.uploadFilePath + File.separator + DateUtils.toString(new Date(), "yyyyMMdd") + File.separator + System.currentTimeMillis() + ".zip";
-        File file = new File(Constants.uploadFilePath + File.separator + DateUtils.toString(new Date(), "yyyyMMdd"));
+        String realPath = request.getSession().getServletContext().getRealPath("/");
+        realPath = realPath.substring(0,realPath.length() - 1);
+        String strZipPath = realPath + Constants.uploadFilePath + File.separator + DateUtils.toString(new Date(), "yyyyMMdd") + File.separator + System.currentTimeMillis() + ".zip";
+        File file = new File(realPath + Constants.uploadFilePath + File.separator + DateUtils.toString(new Date(), "yyyyMMdd"));
         if (!file.isDirectory() && !file.exists()) {
         // 创建多层目录
             file.mkdirs();
         }
+        File zipFile = new File(strZipPath);
         try {
+            if(!zipFile.exists()){
+              zipFile.createNewFile();
+            }
             ZipOutputStream out = new ZipOutputStream(new FileOutputStream(strZipPath));
             // 需要同时下载的多个文件
             for (int i = 0; i < filepath.length; i++) {
                 File f = new File(filepath[i]);
+                if(!f.exists()){
+                    continue;
+                }
                 FileInputStream fis = new FileInputStream(f);
                 System.out.println(documentname[i]);
                 out.putNextEntry(new ZipEntry(documentname[i]));
@@ -74,10 +83,10 @@ public class DownloadUtils {
             }
             out.close();
             downLoadFile(request, response, strZipPath, filename + ".zip");
-            File temp = new File(strZipPath);
+            /*File temp = new File(strZipPath);
             if (temp.exists()) {
                 temp.delete();
-            }
+            }*/
         } catch (Exception e) {
             System.out.println("文件下载错误");
         }

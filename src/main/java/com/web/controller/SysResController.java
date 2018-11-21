@@ -84,8 +84,8 @@ public class SysResController {
     }
     @RequestMapping("delQuestion")
     @ResponseBody
-    public Map<String, Object> delQuestion(Integer userId, Integer questionId){
-        return sysResService.delQuestion(userId, questionId);
+    public Map<String, Object> delQuestion(@RequestBody SysQuestion question){
+        return sysResService.delQuestion(question);
     }
     @RequestMapping("upload")
     @ResponseBody
@@ -102,22 +102,26 @@ public class SysResController {
     }
 
     @RequestMapping("downloadZip")
-    public void downloadZip(HttpServletRequest request, HttpServletResponse response, String resIds){
-        if(StringUtils.isEmpty(resIds)){
+    public void downloadZip(HttpServletRequest request, HttpServletResponse response, Integer id){
+        if(StringUtils.isEmpty(id)){
             return;
         }
+        QuestionResRef questionResRef = new QuestionResRef();
+        questionResRef.setQuestionId(id);
+        List<QuestionResRef> list = sysResService.findList(questionResRef);
         List<String> filePathList = new ArrayList<>();
         List<String> fileNameList = new ArrayList<>();
-        for(String resId:resIds.split(",")){
-            SysRes sysRes = sysResService.get(resId);
+        String realPath = request.getSession().getServletContext().getRealPath("/");
+        for(QuestionResRef qResRef:list){
+            SysRes sysRes = sysResService.get(qResRef.getResId());
             SysResPath sysResPath = sysResService.getResPath(sysRes.getResPathId());
-            filePathList.add(sysResPath.getResPath());
+            filePathList.add(realPath + sysResPath.getResPath());
             fileNameList.add(sysRes.getResName());
 
         }
-        DownloadUtils.batchDownLoadFile(request, response,"a.zip",
-                fileNameList.toArray(new String[fileNameList.size()]),
-                filePathList.toArray(new String[filePathList.size()]));
+        DownloadUtils.batchDownLoadFile(request, response,"question",
+                filePathList.toArray(new String[filePathList.size()]),
+                fileNameList.toArray(new String[fileNameList.size()]));
         return ;
     }
     @RequestMapping("getStatisticsByDay")
