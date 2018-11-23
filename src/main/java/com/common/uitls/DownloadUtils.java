@@ -3,6 +3,7 @@ package com.common.uitls;
 
 import com.common.base.contants.Constants;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -19,8 +20,11 @@ import java.util.zip.ZipOutputStream;
 public class DownloadUtils {
 
     public static void downLoadFile(HttpServletRequest request, HttpServletResponse response, String filePath, String filename) {
+
+        ServletOutputStream out;
         try {
             File file = new File(filePath);
+            FileInputStream inputStream = new FileInputStream(file);
             // 先去掉文件名称中的空格,然后转换编码格式为utf-8,保证不出现乱码,这个文件名称 用于浏览器的下载框中自动显示的文件名
             String userAgent = request.getHeader("User-Agent");
             if (userAgent.contains("MSIE") || userAgent.contains("Trident")) {
@@ -30,15 +34,16 @@ public class DownloadUtils {
             }
             response.addHeader("Content-Disposition", "attachment;filename=" + filename);
             response.setContentType("multipart/form-data");
-            byte[] b = new byte[1024];
+            out = response.getOutputStream();
+            int b = 0;
+            byte[] buffer = new byte[1024];
             int len = 0;
-            FileInputStream fs = new FileInputStream(file);
-            PrintWriter writer = response.getWriter();
-            while ((len = fs.read()) != -1) {
-                writer.write(len);
+            while (b != -1){
+                b = inputStream.read(buffer);
+                //4.写到输出流(out)中
+                out.write(buffer,0,b);
             }
-            fs.close();
-            writer.close();
+
         } catch (Exception e) {
             e.printStackTrace();
         }

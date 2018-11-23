@@ -102,6 +102,7 @@ public class SysResController {
     }
 
     @RequestMapping("downloadZip")
+    @ResponseBody
     public void downloadZip(HttpServletRequest request, HttpServletResponse response, Integer id){
         if(StringUtils.isEmpty(id)){
             return;
@@ -116,7 +117,7 @@ public class SysResController {
             SysRes sysRes = sysResService.get(qResRef.getResId());
             SysResPath sysResPath = sysResService.getResPath(sysRes.getResPathId());
             filePathList.add(realPath + sysResPath.getResPath());
-            fileNameList.add(sysRes.getResName());
+            fileNameList.add(sysResPath.getResName());
 
         }
         DownloadUtils.batchDownLoadFile(request, response,"question",
