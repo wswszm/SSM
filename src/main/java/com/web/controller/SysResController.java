@@ -80,12 +80,12 @@ public class SysResController {
     @RequestMapping("findResRefList")
     @ResponseBody
     public Map<String, Object> findResRefList(@RequestBody findResRefDto dto){
-        return sysResService.findResRefList(dto.getUserId(), dto.getQuestionName(), dto.getPageNo(), dto.getPageSize());
+        return sysResService.findResRefList(dto.getUserId(), dto.getQuestionName(), dto.getPageNo(), dto.getPageSize(),dto.getIsDel());
     }
     @RequestMapping("delQuestion")
     @ResponseBody
-    public Map<String, Object> delQuestion(Integer userId, Integer questionId){
-        return sysResService.delQuestion(userId, questionId);
+    public Map<String, Object> delQuestion(@RequestBody SysQuestion question){
+        return sysResService.delQuestion(question);
     }
     @RequestMapping("upload")
     @ResponseBody
@@ -102,22 +102,32 @@ public class SysResController {
     }
 
     @RequestMapping("downloadZip")
-    public void downloadZip(HttpServletRequest request, HttpServletResponse response, String resIds){
-        if(StringUtils.isEmpty(resIds)){
+    @ResponseBody
+    public void downloadZip(HttpServletRequest request, HttpServletResponse response, Integer id){
+        if(StringUtils.isEmpty(id)){
             return;
         }
+        QuestionResRef questionResRef = new QuestionResRef();
+        questionResRef.setQuestionId(id);
+        List<QuestionResRef> list = sysResService.findList(questionResRef);
         List<String> filePathList = new ArrayList<>();
         List<String> fileNameList = new ArrayList<>();
-        for(String resId:resIds.split(",")){
-            SysRes sysRes = sysResService.get(resId);
+        String realPath = request.getSession().getServletContext().getRealPath("/");
+        for(QuestionResRef qResRef:list){
+            SysRes sysRes = sysResService.get(qResRef.getResId());
             SysResPath sysResPath = sysResService.getResPath(sysRes.getResPathId());
-            filePathList.add(sysResPath.getResPath());
-            fileNameList.add(sysRes.getResName());
+            filePathList.add(realPath + sysResPath.getResPath());
+            fileNameList.add(sysResPath.getResName());
 
         }
-        DownloadUtils.batchDownLoadFile(request, response,"a.zip",
-                fileNameList.toArray(new String[fileNameList.size()]),
-                filePathList.toArray(new String[filePathList.size()]));
+        DownloadUtils.batchDownLoadFile(request, response,"question",
+                filePathList.toArray(new String[filePathList.size()]),
+                fileNameList.toArray(new String[fileNameList.size()]));
         return ;
+    }
+    @RequestMapping("getStatisticsByDay")
+    @ResponseBody
+    public Map<String, Object> getStatisticsByDay(){
+        return sysResService.getStatisticsByDay();
     }
 }

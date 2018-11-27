@@ -1,6 +1,7 @@
 package com.web.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.*;
 
 @Table(name = "sys_question")
@@ -16,6 +17,9 @@ public class SysQuestion implements Serializable {
 
     @Column(name = "create_by")
     private Integer createBy;
+
+    @Column(name = "create_date")
+    private Date createDate;
 
     @Column(name = "is_del")
     private String isDel;
@@ -79,6 +83,20 @@ public class SysQuestion implements Serializable {
     }
 
     /**
+     * @return create_date
+     */
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    /**
+     * @param createDate
+     */
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    /**
      * @return is_del
      */
     public String getIsDel() {
@@ -102,6 +120,7 @@ public class SysQuestion implements Serializable {
         sb.append(", questionName=").append(questionName);
         sb.append(", content=").append(content);
         sb.append(", createBy=").append(createBy);
+        sb.append(", createDate=").append(createDate);
         sb.append(", isDel=").append(isDel);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");

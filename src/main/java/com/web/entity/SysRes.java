@@ -1,6 +1,7 @@
 package com.web.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.*;
 
 @Table(name = "sys_res")
@@ -41,6 +42,9 @@ public class SysRes implements Serializable {
      */
     @Column(name = "audit_status")
     private String auditStatus;
+
+    @Column(name = "create_date")
+    private Date createDate;
 
     /**
      * 是否可用
@@ -199,6 +203,20 @@ public class SysRes implements Serializable {
     }
 
     /**
+     * @return create_date
+     */
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    /**
+     * @param createDate
+     */
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    /**
      * 获取是否可用
      *
      * @return is_del - 是否可用
@@ -232,6 +250,7 @@ public class SysRes implements Serializable {
         sb.append(", expiryDate=").append(expiryDate);
         sb.append(", creatorId=").append(creatorId);
         sb.append(", auditStatus=").append(auditStatus);
+        sb.append(", createDate=").append(createDate);
         sb.append(", isDel=").append(isDel);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");

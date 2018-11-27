@@ -15,6 +15,7 @@
     <result column="expiry_date" jdbcType="VARCHAR" property="expiryDate" />
     <result column="creator_id" jdbcType="INTEGER" property="creatorId" />
     <result column="audit_status" jdbcType="CHAR" property="auditStatus" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
     <result column="is_del" jdbcType="CHAR" property="isDel" />
   </resultMap>
 </mapper>
