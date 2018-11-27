@@ -1,0 +1,7 @@
+127.0.0.1 - - [22/Nov/2018:22:16:37 +0800] "GET /res/sys_res/downloadZip?id=1 HTTP/1.1" 200 2786 http-bio-8080-exec-1 6168
+127.0.0.1 - - [22/Nov/2018:22:26:26 +0800] "GET /res/sys_res/downloadZip?id=1 HTTP/1.1" 200 2786 http-bio-8080-exec-4 408578
+127.0.0.1 - - [22/Nov/2018:22:30:07 +0800] "GET /res/sys_res/downloadZip?id=1 HTTP/1.1" 200 5 http-bio-8080-exec-1 6223
+127.0.0.1 - - [22/Nov/2018:22:31:02 +0800] "GET /res/sys_res/downloadZip?id=1 HTTP/1.1" 200 5 http-bio-8080-exec-3 5178
+127.0.0.1 - - [22/Nov/2018:22:38:45 +0800] "GET /res/sys_res/downloadZip?id=1 HTTP/1.1" 200 1902 http-bio-8080-exec-1 5710
+127.0.0.1 - - [22/Nov/2018:22:40:56 +0800] "GET /res/sys_res/downloadZip?id=1 HTTP/1.1" 200 1902 http-bio-8080-exec-4 58169
+127.0.0.1 - - [22/Nov/2018:22:43:23 +0800] "GET /res/sys_res/downloadZip?id=1 HTTP/1.1" 200 1930 http-bio-8080-exec-1 3745
