@@ -1,0 +1,139 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>非实物资产管理中心</title>
+<link rel="stylesheet" href="css/style1.css" type="text/css" media="all"/>
+<style type="text/css">
+input[type="submit"]{background:#0aa6d6;font-size:15px;color:#FFFFFF;border:0;text-shadow:0 -1px 0 #535353;margin:5px 5px 0 0;padding:0 0 3px 0;display:block;width:106px;height:35px;text-align:center;font-weight:bold;line-height:33px; border-radius:3px;}
+input[type="button"]{background:#0aa6d6;font-size:15px;color:#FFFFFF;border:0;text-shadow:0 -1px 0 #535353;margin:5px 5px 0 0;padding:0 0 3px 0;display:block;width:106px;height:35px;text-align:center;font-weight:bold;line-height:33px; border-radius:3px;}
+input.button_button{background:#0aa6d6;margin:0;width:106px;height:35px;border:0;font-size:15px;color:#FFFFFF;text-shadow:0 -1px 0 #535353;padding:0 0 3px 0;text-align:center;font-weight:bold;line-height:33px;cursor:pointer; display: inline-block; margin-right:30px; border-radius:3px;}
+
+/*Tooltips*/
+.tooltips_main{position:absolute;left:0;margin:-5px 0 0 2px;z-index:999;}
+.tooltips_box,.tooltips,.msg{display:inline-block;*display:inline;*zoom:1;position:relative;border-style:solid;border-color:#FF1F1F;}
+.tooltips,.msg{border-width:0 1px;*left:-2px;background-color:#FFCFCF;}
+.tooltips_box{border-width:1px;line-height:1.5;}
+.tooltips{margin:0 -2px;}
+.msg{margin:1px -2px;padding:0 6px;color:#2F2C2C;text-shadow:0 1px 0 #FFFFFF;font-size:12px;}
+.ov{background:url('images/tri.gif') no-repeat scroll 0 0 transparent;position:absolute;left:30%;overflow:hidden;width:15px;height:15px;margin:16px 0 0 0;display:inline;}
+/*regist*/
+.register .form_submit{border-bottom:1px dotted #0f62c5;}
+.register .form_submit .fieldset .field-group{min-height:55px;}
+.register .form_submit .fieldset .field-group .title{float:left;width:120px;text-align:right;margin:4px 0 0 0;font-size:14px;}
+.register .form_submit .fieldset .field-group .control-group{float:left;width:300px;margin:0 10px;}
+.register .form_submit .fieldset .field-group .tips{float:left;width:250px;color:#8E8E8E;}
+.register .div_submit{width:100%;margin:10px 0; text-align:center;}
+
+/*end regist*/
+.fieldset .input_add_background{height:30px;width:112px;float:left;margin:0 2px 0 0;}
+.fieldset .input_add_background input.register_input_ot{background-color:#f9f9f9;border:1px solid #ccc; border-radius:3px;color:#4F4F4F;font-size:12px;height:18px;outline:medium none;width: 100px;padding:5px 10px;}
+.fieldset .input_add_long_background{height:30px;width:286px;float:left;margin:0 0 15px 0;display:inline;}
+.fieldset .input_add_long_light_background{height:30px;width:286px;float:left;}
+.fieldset .input_add_long_background input.register_input{background-color:#f9f9f9;border:1px solid #ccc; border-radius:3px;color:#4F4F4F;font-size:12px;height:18px;outline:medium none;width: 270px;padding:5px 10px;}
+.fieldset .input_text{display:inline-block;position:absolute;vertical-align:top;margin:6px 0 0 10px;z-index:2;font-style:italic;color:#BFBFBF;}
+.select-style {background-color: #f9f9f9; border:1px solid #ccc; border-radius:3px; color: #4F4F4F; font-size: 12px; height: 30px; outline: medium none; width: 270px; padding: 1px;}
+.textarea-style {background-color: #f9f9f9; border:1px solid #ccc; border-radius:3px; color: #4F4F4F; font-size: 12px; outline: medium none; width: 270px; height: 58px; padding: 1px; }
+
+
+</style>
+<script src="js/jquery-1.8.3.min.js"></script>
+<script src="js/jquery.media.js"></script>
+<script type="text/javascript" src="js/script.js"></script>
+<script src="js/common.js"></script>
+</head>
+
+<body>
+<div id="hearder2" class="clearfix">
+  <div class="logo-name">非实物资产管理中心</div>
+  <div class="form-tools">
+    </div>
+</div>
+<div id="menu-box" class="clearfix">
+	
+	<ul></ul>
+</div>
+<div id="slider-box" style="background:url(images/slider4.jpg) center center;"></div>
+<div id="detail2-box" class="clearfix">
+	<div class="tit-80 resName"></div>
+    <div class="content-box" style="float:left;width: 100%;padding:0px;">
+    	<h1>资源详情</h1>
+        <div class="content">
+		<!-- form -->
+		<div class="body_main clearfix" style="padding : 6px 6px 6px 6px;"> 
+			<p class="resImg"></p>
+			<p><a class="res_down" href="">下载资源</a></p>
+			<p><span>资源名称：</span><span class="resName"></span></p>
+			<p><span>作者：</span><span class="autorName"></span></p>
+			<p><span>授课学科：</span><span class="securityLevel"></span></p>
+			<p><span>授课年级：</span><span class="expiryDate"></span></p>
+			<p><span>资源类型：</span><span class="resType"></span></p>
+			<p><span>在线预览</span><span class=""></span></p>
+		</div>
+			<div id="handout_wrap_inner" style="height:800px;"></div>
+		<!-- form end -->
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+
+
+
+	var user_id = sessionStorage.getItem('id')
+	var get_all_res_api_address = window.location.origin+'/res/sys_res/selectList'
+	var saveResRef_api_address = window.location.origin+'/res/sys_res/saveResRef'
+	authCheck()
+	renderHeader($('#menu-box ul'),sessionStorage.getItem('roleEnName'))
+	var res_id = getQueryString('res_id')
+	
+//解析get参数
+function getQueryString(name) {
+    console.log('func-getQueryString')
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) return (r[2]);
+    return null;
+}
+//获取数据
+$.ajax({
+            url: get_all_res_api_address,
+            type: "post",
+            data: JSON.stringify({id:getQueryString('res_id')}),
+            dataType: 'json',
+			contentType:'application/json; charset=utf-8',
+            success: function (data) {
+                if( data.code=='200' ){
+					let d = data.data.resList[0].res
+					let resPath = data.data.resList[0].resPath
+					let sysImgPath = data.data.resList[0].sysImgPath
+					$('.resName').text(d.resName)
+					$('.autorName').text(d.autorName)
+					$('.securityLevel').text(d.securityLevel)
+					$('.expiryDate').text(d.expiryDate==1?'一年级':(d.expiryDate==2?'二年级':'三年级'))
+					$('.resType').text(d.resType==1?'word':(d.resType==2?'ppt':'video'))
+					$('.resImg').html('<img src="'+window.location.origin+data.data.resList[0].sysImgPath.resPath+'" style="width:500px;"/>')
+					$('.res_down').attr({'href':window.location.origin+resPath.resPath})
+					$('.res_down').attr({'download':window.location.origin+resPath.resName})
+					$('.res_emed').attr({'src':window.location.origin+data.data.resList[0].resPath.resPath})
+					//在线预览
+					$('#handout_wrap_inner').media({
+						width: '100%',
+						height: '800px',
+						autoplay: true,
+						src:window.location.origin+data.data.resList[0].resPath.resPath,
+								});
+						console.log(window.location.origin+data.data.resList[0].resPath.resPath)
+				}else{
+					alert('获取资源失败')
+				}
+          }
+        })
+</script>
+</body>
+</html>
+<style>
+	.body_main p{
+		margin-top:8px;
+	}
+</style>

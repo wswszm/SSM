@@ -1,0 +1,115 @@
+<html lang="en">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta charset="utf-8" />
+		<title>注册</title>
+
+		<meta name="description" content="User login page" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		<link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="assets/font-awesome/4.2.0/css/font-awesome.min.css" />
+		<link rel="stylesheet" href="assets/fonts/fonts.googleapis.com.css" />
+		<link rel="stylesheet" href="assets/css/ace.min.css" />
+		<link rel="stylesheet" href="assets/css/ace-rtl.min.css" />
+		<script src="./js/jquery-1.8.3.min.js"></script>
+	</head>
+	<body class="login-layout light-login">
+		<div class="main-container">
+			<div class="main-content">
+				<div class="row">
+					<div class="col-sm-10 col-sm-offset-1">
+						<div class="login-container" style="margin-top: 100px">
+							<div class="center">
+								<h4 class="blue" id="id-company-text">非实物资产管理中心<br /></h4>
+							</div>
+							<div class="space-6"></div>
+							<div class="position-relative">
+								<div id="signup-box" class="signup-box widget-box visible no-border">
+									<div class="widget-body">
+										<div class="widget-main">
+											<h4 class="header green lighter bigger">
+												<i class="ace-icon fa fa-users blue"></i>
+												用户注册
+											</h4>
+  
+											<div class="space-6"></div>
+											<p>填写信息: </p>
+											<label class="inline" style="margin-right:30px;">
+												<input name="roleType" type="radio" id="radio" value="3" class="ace" checked><span class="lbl"> 教师</span>
+											</label>
+											<label class="inline">
+												<input name="roleType" type="radio" id="radio" value="2" class="ace" ><span class="lbl"> 学生</span>
+											</label>
+											<form id="register" name="register" method="post" action="">
+												<fieldset>
+													<label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input name="userName" type="text" class="form-control" placeholder="用户名" />
+															<i class="ace-icon fa fa-user"></i>
+														</span>
+													</label>
+													<label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input name="password" type="password" class="form-control" placeholder="密码" />
+															<i class="ace-icon fa fa-lock"></i>
+														</span>
+													</label>
+													<label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="password" class="form-control" placeholder="确认密码" />
+															<i class="ace-icon fa fa-retweet"></i>
+														</span>
+													</label>
+													<div class="space-24"></div>
+													<div class="clearfix">
+														<button type="button" class="width-65 pull-right btn btn-sm btn-success regis_btn">
+															<span class="bigger-110">注册</span>
+															<i class="ace-icon fa fa-arrow-right icon-on-right"></i>
+														</button>
+													</div>
+												</fieldset>
+											</form>
+										</div>
+
+										<div class="toolbar center">
+											<a href="login.html" class="back-to-login-link">
+												<i class="ace-icon fa fa-arrow-left"></i>
+												返回登录
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+<script>
+var regist_api_address = window.location.origin+'/res/user/regist'
+$('.regis_btn').click(function(){
+		let param =  getParam()
+		console.log(param)
+		 $.ajax({
+				url: regist_api_address,
+				type: "post",
+				dataType: 'json',
+				data:JSON.stringify(param),
+				contentType:'application/json; charset=utf-8',
+				success: function (data) {
+					if(confirm('注册成功，用户名：'+$('input[name="userName"]').val()+'密码：'+$('input[name="password"]').val())){
+						window.location.href = 'login.html'
+					}
+				}
+			})
+})
+function getParam(){
+	return {
+			userName:$('input[name="userName"]').val(),
+			password:$('input[name="password"]').val(),
+			roleType:$('input[name="roleType"]:checked').val(),
+			}
+}
+</script>

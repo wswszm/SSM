@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>非实物资产管理中心</title>
+	<link rel="stylesheet" href="css/style1.css" type="text/css" media="all"/>
+</head>
+
+<body>
+<div id="hearder2" class="clearfix">
+	<div class="logo-name">非实物资产管理中心</div>
+	<div class="form-tools">
+	</div>
+</div>
+<div id="menu-box" class="clearfix">
+	<ul>
+	</ul>
+</div>
+
+<!-- detail -->
+<div id="detail2-box" class="clearfix" style="background: none;">
+	<div class="content-box" style="width:100%;float:left">
+		<ul class="clearfix res_container" style=" width:100%;float: left;">
+		</ul>
+	</div>
+</div>
+<script src="js/jquery-1.8.3.min.js"></script>
+<script src="js/jquery.page.js"></script>
+<script src="js/common.js"></script>
+<script>
+var user_id = sessionStorage.getItem('id')
+	authCheck()
+	renderHeader($('#menu-box ul'),sessionStorage.getItem('roleEnName'))
+   var user_id = sessionStorage.getItem('id')
+	var get_all_res_api_address = window.location.origin+'/res/sys_res/selectList'
+	var saveResRef_api_address = window.location.origin+'/res/sys_res/saveResRef'
+	var update_api_address = window.location.origin+'/res/sys_res/update'
+	authCheck()
+	renderHeader($('#menu-box ul'),sessionStorage.getItem('roleEnName'))
+	
+		$.ajax({
+            url: get_all_res_api_address,
+            type: "post",
+            data: JSON.stringify({creatorId:user_id,isDel:0}),
+            dataType: 'json',
+			contentType:'application/json; charset=utf-8',
+            success: function (data) {
+		
+                if( data.code=='200' ){
+					let d = data.data.resList
+					let h = ''
+					for (let p in d){
+						h+='<li class="pic" style="box-shadow: 1px 1px 1px 1px silver;">'
+						h+='<div class="img-box">'
+						h+='<a href="res_detail.html?res_id='+d[p].res.id+'">'
+						h+='<img src="'+window.location.origin+d[p].sysImgPath.resPath+'">'
+						h+='</a>'
+						h+='</div>'
+						h+='<h3><a href="res_detail.html?res_id='+d[p].res.id+'">'+d[p].res.resName+'</a></h3>'
+						h+='<h3 style="float: right;"><a href="res_edit.html?res_id='+d[p].res.id+'"><button type="button" class="edit_res" res_id='+d[p].res.id+' style="cursor:pointer;">编辑</button></a><button class="del_res" type="button" res_id='+d[p].res.id+' style="cursor:pointer;">删除</button></h3>'
+						h+='</li>'
+					}
+					$('.res_container').append(h)
+				}else{
+					alert('获取资源失败')
+				}
+          }
+        })
+		$('body').on('click','.del_res',function(e){
+			let o = $(e.target)
+			$.ajax({
+            url: update_api_address,
+            type: "post",
+            data: JSON.stringify({id:o.attr('res_id'),isDel:'1'}),
+            dataType: 'json',
+			contentType:'application/json; charset=utf-8',
+            success: function (data) {
+                if( data.code=='200' ){
+					o.parent().parent().remove()
+					alert('删除成功')
+					
+				}else{
+					alert('删除失败')
+				}
+			  }
+			})
+		})
+</script>
+
+</body>
+</html>

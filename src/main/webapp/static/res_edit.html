@@ -1,0 +1,337 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>非实物资产管理中心</title>
+<link rel="stylesheet" href="css/style1.css" type="text/css" media="all"/>
+<style type="text/css">
+input[type="submit"]{background:#0aa6d6;font-size:15px;color:#FFFFFF;border:0;text-shadow:0 -1px 0 #535353;margin:5px 5px 0 0;padding:0 0 3px 0;display:block;width:106px;height:35px;text-align:center;font-weight:bold;line-height:33px; border-radius:3px;}
+input[type="button"]{background:#0aa6d6;font-size:15px;color:#FFFFFF;border:0;text-shadow:0 -1px 0 #535353;margin:5px 5px 0 0;padding:0 0 3px 0;display:block;width:106px;height:35px;text-align:center;font-weight:bold;line-height:33px; border-radius:3px;}
+input.button_button{background:#0aa6d6;margin:0;width:106px;height:35px;border:0;font-size:15px;color:#FFFFFF;text-shadow:0 -1px 0 #535353;padding:0 0 3px 0;text-align:center;font-weight:bold;line-height:33px;cursor:pointer; display: inline-block; margin-right:30px; border-radius:3px;}
+
+/*Tooltips*/
+.tooltips_main{position:absolute;left:0;margin:-5px 0 0 2px;z-index:999;}
+.tooltips_box,.tooltips,.msg{display:inline-block;*display:inline;*zoom:1;position:relative;border-style:solid;border-color:#FF1F1F;}
+.tooltips,.msg{border-width:0 1px;*left:-2px;background-color:#FFCFCF;}
+.tooltips_box{border-width:1px;line-height:1.5;}
+.tooltips{margin:0 -2px;}
+.msg{margin:1px -2px;padding:0 6px;color:#2F2C2C;text-shadow:0 1px 0 #FFFFFF;font-size:12px;}
+.ov{background:url('images/tri.gif') no-repeat scroll 0 0 transparent;position:absolute;left:30%;overflow:hidden;width:15px;height:15px;margin:16px 0 0 0;display:inline;}
+/*regist*/
+.register .form_submit{border-bottom:1px dotted #0f62c5;}
+.register .form_submit .fieldset .field-group{min-height:55px;}
+.register .form_submit .fieldset .field-group .title{float:left;width:120px;text-align:right;margin:4px 0 0 0;font-size:14px;}
+.register .form_submit .fieldset .field-group .control-group{float:left;width:300px;margin:0 10px;}
+.register .form_submit .fieldset .field-group .tips{float:left;width:250px;color:#8E8E8E;}
+.register .div_submit{width:100%;margin:10px 0; text-align:center;}
+
+/*end regist*/
+.fieldset .input_add_background{height:30px;width:112px;float:left;margin:0 2px 0 0;}
+.fieldset .input_add_background input.register_input_ot{background-color:#f9f9f9;border:1px solid #ccc; border-radius:3px;color:#4F4F4F;font-size:12px;height:18px;outline:medium none;width: 100px;padding:5px 10px;}
+.fieldset .input_add_long_background{height:30px;width:286px;float:left;margin:0 0 15px 0;display:inline;}
+.fieldset .input_add_long_light_background{height:30px;width:286px;float:left;}
+.fieldset .input_add_long_background input.register_input{background-color:#f9f9f9;border:1px solid #ccc; border-radius:3px;color:#4F4F4F;font-size:12px;height:18px;outline:medium none;width: 270px;padding:5px 10px;}
+.fieldset .input_text{display:inline-block;position:absolute;vertical-align:top;margin:6px 0 0 10px;z-index:2;font-style:italic;color:#BFBFBF;}
+.select-style {background-color: #f9f9f9; border:1px solid #ccc; border-radius:3px; color: #4F4F4F; font-size: 12px; height: 30px; outline: medium none; width: 270px; padding: 1px;}
+.textarea-style {background-color: #f9f9f9; border:1px solid #ccc; border-radius:3px; color: #4F4F4F; font-size: 12px; outline: medium none; width: 270px; height: 58px; padding: 1px; }
+
+
+</style>
+<script src="js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="js/script.js"></script>
+<script src="js/common.js"></script>
+</head>
+
+<body>
+<div id="hearder2" class="clearfix">
+  <div class="logo-name">非实物资产管理中心</div>
+  <div class="form-tools">
+    </div>
+</div>
+<div id="menu-box" class="clearfix">
+	<ul>
+    </ul>
+</div>
+<div id="slider-box" style="background:url(images/slider4.jpg) center center;"></div>
+<div id="detail2-box" class="clearfix">
+	<div class="tit-80">上传资源</div>
+    <div class="content-box" style="float:left;width: 100%;padding:0px;">
+    	<h1>资源信息</h1>
+        <div class="content">
+		<!-- form -->
+		<div class="body_main clearfix"> 
+				<div id="register" class="register clearfix">
+					<form id="form" action="/res/sys_res/save" method="post" enctype=”multipart/form-data” contentType="application/json">
+						<div id="form_submit" class="form_submit clearfix">
+							<div class="fieldset">
+								<div class="field-group">
+									<label class="required title">资源名称</label>
+									<span class="control-group">
+										<div class="input_add_long_background">
+											<input class="register_input" type="text"  name="resName" value="">
+										</div>
+									</span>
+									<label class="tips">请输入资源名称</label>
+								</div>
+								<div class="field-group">
+									<label class="required title">教师姓名</label>
+									<span class="control-group">
+										<div class="input_add_long_background">
+											<input class="register_input" type="text"  name="autorName" value="">
+										</div>
+									</span>
+									<label class="tips">请输入教师姓名</label>
+								</div>
+								<div class="field-group">
+									<label class="required title">授课学科</label>
+									<span class="control-group">
+										<div class="input_add_long_background">
+											<select name="securityLevel" class="register_input select-style">
+											  <option value="" selected>--- 选择授课学科 ---</option>
+											  <option value="语文">语文</option>
+											  <option value="数学">数学</option>
+											  <option value="英语">英语</option>
+											</select>
+										</div>
+									</span>
+									<label class="tips">请输入授课学科</label>
+								</div>
+								<div class="field-group">
+									<label class="required title">授课年级</label>
+									<span class="control-group">
+										<div class="input_add_long_background">
+											<select name="expiryDate" class="register_input select-style">
+											  <option value="" selected>--- 选择授课年级 ---</option>
+											  <option value="1">一年级</option>
+											  <option value="2">二年级</option>
+											  <option value="3">三年级</option>
+											</select>
+										</div>
+									</span>
+									<label class="tips">请输入授课年级</label>
+								</div>
+								<div class="field-group">
+									<label class="required title">资源类型</label>
+									<span class="control-group">
+										<div class="input_add_long_background">
+											<select name="resType" class="register_input select-style">
+											  <option value="" selected>--- 选择资源类型 ---</option>
+											  <option value="2">ppt</option>
+											  <option value="3">video</option>
+											  <option value="1">word</option>
+											</select>
+										</div>
+									</span>
+									<label class="tips">请选资源类型</label>
+								</div>
+								
+								
+								
+								<div class="field-group res_file_show">
+									<label class="required title">资源文件</label>
+									<span class="control-group">
+										<a class="a_file" href="">文件下载</a>
+										<button type="button" class="remove_f" show_item="res_file_up">移除文件</button>
+									</span>
+									<label class="tips">资源文件：<span class="desc_file_name"></span></label>
+								</div>
+								<div class="field-group res_file_up" style="display:none;">
+									<label class="required title">文件上传</label>
+									<span class="control-group">
+										<div class="input_add_long_background">
+											<input class="register_input" type="file" id="file" name="file" value="">
+											<input class="register_input" type="hidden" name="resPathId" value="">
+										</div>
+									</span>
+									<label class="tips">请选择要上传的资源文件</label>
+								</div>
+								
+								
+								<div class="field-group res_file_show">
+									<label class="required title">缩略图</label>
+									<span class="control-group">
+										<img class="img_file" src=""></img>
+										<button type="button" class="remove_f" show_item="res_img_up">移除图片</button>
+									</span>
+									<label class="tips">缩略图</label>
+								</div>
+								<div class="field-group res_img_up" style="display:none;">
+									<label class="required title">资源缩略图</label>
+									<span class="control-group">
+										<div class="input_add_long_background">
+											<input class="register_input" type="file" id="imgFile" name="imgFile" value="">
+											<input class="register_input" type="hidden" name="imgPathId" value="">
+										</div>
+										<div><img src="" id="source_pic_show"></div>
+									</span>
+									<label class="tips">请上传缩略图，用于展示资源</label>
+								</div>
+							</div>
+						</div>
+						<div id="div_submit" class="div_submit">
+							<input type="button" value="提交修改" class='button_button submit'>
+						</div>
+					</form>
+				</div>
+		</div>
+		<!-- form end -->
+        </div>
+    </div>
+</div>
+<div id="div5" class="clearfix">
+</div>
+<div id="div6"></div>
+<script type="text/javascript">
+	authCheck()
+	renderHeader($('#menu-box ul'),sessionStorage.getItem('roleEnName'))
+//提交资源
+let commit_file_api_address = window.location.origin+'/res/sys_res/upload'
+let commit_res_api_address = window.location.origin+'/res/sys_res/saveRes'
+var get_all_res_api_address = window.location.origin+'/res/sys_res/selectList'
+	var update_api_address = window.location.origin+'/res/sys_res/update'
+	//	获取uxinxi
+	$.ajax({
+            url: get_all_res_api_address,
+            type: "post",
+            data: JSON.stringify({id:getQueryString('res_id')}),
+            dataType: 'json',
+			contentType:'application/json; charset=utf-8',
+            success: function (data) {
+                if( data.code=='200' ){
+					let d = data.data.resList[0]
+					console.log(d)
+					//填充数据
+					$('input[name="resName"]').val(d.res.resName)
+					$('input[name="autorName"]').val(d.res.autorName)
+					$('select[name="securityLevel"]').val(d.res.securityLevel)
+					$('select[name="expiryDate"]').val(d.res.expiryDate)
+					$('select[name="resType"]').val(d.res.resType)
+					$('input[name="resPathId"]').val(d.res.resPathId)
+					$('input[name="imgPathId"]').val(d.res.imgPathId)
+					
+					$('.a_file').attr({'href':window.location.origin+d.resPath.resPath})
+					$('.a_file').attr({'download':window.location.origin+d.resPath.resName})
+					$('.img_file').attr({'src':window.location.origin+d.sysImgPath.resPath})
+					$('.desc_file_name').text(d.resPath.resName)
+				}else{
+					alert('获取资源失败')
+				}
+          }
+        })
+$('.remove_f').click(function(e){
+	let o = $(e.target)
+	o.parent().parent().hide()
+	$('.'+o.attr('show_item')).show()
+})
+
+
+
+	$('#file').change(function(){
+		let formFile = new FormData();
+		formFile.append('file', document.getElementById("file").files[0])
+		$.ajax({
+				url: commit_file_api_address,
+				type: "post",
+				data: formFile,
+				dataType: 'json',
+				processData: false,
+				contentType: false,
+				//contentType:'application/json',
+				//enctype:'multipart/form-data',
+				success: function (data) {
+					$('input[name="resPathId"]').val(data.data.sysResPath.id)
+					console.log(data.data.sysResPath.id)
+				},
+				error: function (e) {
+					commit_ready = false
+					confirm('资源上传成功失败')
+				}
+			});
+	})
+	$('#imgFile').change(function(){
+		let imgFile = new FormData();
+		imgFile.append('file', document.getElementById("imgFile").files[0])
+		$.ajax({
+			url: commit_file_api_address,
+			type: "post",
+			data: imgFile,
+			dataType: 'json',
+			processData: false,
+			contentType: false,
+			//contentType:'application/json',
+			//enctype:'multipart/form-data',
+			success: function (data) {
+				console.log(data.data)
+				$('input[name="imgPathId"]').val(data.data.sysResPath.id)
+				console.log(data.data.sysResPath.id)
+			},
+			error: function (e) {
+				commit_ready = false
+				confirm('资源上传成功失败')
+			}
+		});
+	})
+	$('.submit').click(function(e){
+		let c_ok = true
+		let resName = $('input[name="resName"]').val()
+		let autorName = $('input[name="autorName"]').val()
+		let securityLevel = $('select[name="securityLevel"]').val()
+		let expiryDate = $('select[name="expiryDate"]').val()
+		let resType = $('select[name="resType"]').val()
+		let resPathId = $('input[name="resPathId"]').val()
+		let imgPathId = $('input[name="imgPathId"]').val()
+		let param = {
+			id:getQueryString('res_id'),
+			resName:resName,
+			autorName:autorName,
+			securityLevel:securityLevel,
+			expiryDate:expiryDate,
+			resType:resType,
+			resPathId:resPathId,
+			imgPathId:imgPathId,
+			creatorId:sessionStorage.getItem('id')
+		}
+		for(let p in param){
+			if(!param[p]){
+				c_ok = false
+			}
+		}
+		console.log(param)
+		console.log(c_ok)
+		if(c_ok){
+			$.ajax({
+			url: update_api_address,
+			type: "post",
+            dataType: 'json',
+            data:JSON.stringify(param),
+			contentType:'application/json; charset=utf-8',
+			dataType: 'json',
+			success: function (data) {
+				alert('编辑资源成功，自动刷新')
+				window.location.reload(true)
+			},
+			error: function (e) {
+				commit_ready = false
+				confirm('资源上传失败')
+			}
+		});
+		}
+		
+		
+		return false;
+		
+	    
+	})
+	//解析get参数
+function getQueryString(name) {
+    console.log('func-getQueryString')
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) return (r[2]);
+    return null;
+}
+</script>
+</body>
+</html>
+<style>
+</style>

@@ -1,0 +1,252 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>非实物资产管理中心</title>
+	<link rel="stylesheet" href="css/style1.css" type="text/css" media="all"/>
+</head>
+
+<body>
+<div id="hearder2" class="clearfix">
+	<div class="logo-name">非实物资产管理中心</div>
+	<div class="form-tools">
+	</div>
+</div>
+<div id="menu-box" class="clearfix">
+	<ul>
+	</ul>
+</div>
+<div id="detail2-box" class="clearfix" style="background:none;">
+    <div class="content-box" style="width:100%;float:none;padding:0px;">
+    	<h1>资源列表</h1>
+		<div style="border-bottom:1px dotted gray;padding-bottom:2px;">
+			题库名称：<input name="question_name" value="">
+			题库描述：<input name="question_desc" value="">
+			<button class="create_question">生成题库</button>
+		</div>
+		<div class="search_area">
+			<div dtype="securityLevel"> 
+				<span>授课学科：</span>
+				<span class="param_c" value="">全部</span>
+				<span class="param_c" value="语文">语文</span>
+				<span class="param_c" value="数学">数学</span>
+				<span class="param_c" value="英语">英语</span>
+			</div>
+			<div dtype="expiryDate">
+				<span>授课年级：</span>
+				<span class="param_c" value="">全部</span>
+				<span class="param_c" value="1">一年级</span>
+				<span class="param_c" value="2">二年级</span>
+				<span class="param_c" value="3">三年级</span>
+			</div>
+			<div dtype="resType">
+				<span>资源类型：</span>
+				<span class="param_c" value="">全部</span>
+				<span class="param_c" value="2">ppt</span>
+				<span class="param_c" value="3">video</span>
+				<span class="param_c" value="1">word</span>
+			</div>
+		<div>
+        <ul class="res_container">
+        </ul>
+    </div>
+</div>
+</div>
+<script src="js/jquery-1.8.3.min.js"></script>
+<script src="js/common.js"></script>
+<script>
+	var res_id_list = []
+	var user_id = sessionStorage.getItem('id')
+	var get_all_res_api_address = window.location.origin+'/res/sys_res/selectList'
+	var saveResRef_api_address = window.location.origin+'/res/sys_res/saveResRef'
+	var update_api_address = window.location.origin+'/res/sys_res/update'
+	authCheck()
+	renderHeader($('#menu-box ul'),sessionStorage.getItem('roleEnName'))
+	//获取
+		//获取所you资源
+	$.ajax({
+            url: get_all_res_api_address,
+            type: "post",
+            data: JSON.stringify({isDel:0}),
+            dataType: 'json',
+			contentType:'application/json; charset=utf-8',
+            success: function (data) {
+                if( data.code=='200' ){
+				let d = data.data.resList
+					let h = ''
+					for (let p in d){
+						h+='<li class="text">'
+						h+='<input type="checkbox" name="res_single" value="'+d[p].res.id+'"><a href="javascript:void(0)" style="overflow:unset;">'+d[p].res.resName+'</a>'
+						h+='</li>'
+						res_id_list.push(d[p].res.id)
+					}
+					$('.res_container').html(h)
+				}else{
+					alert('获取资源失败')
+				}
+          }
+        })
+		
+		
+	//生成题库
+	$('.create_question').click(function(){
+		let ids = []
+		$('body input[name="res_single"]:checked').each(function(){
+			let o = $(this)
+			ids.push(o.val())
+		})
+		let ids_str = ids.join(',')
+		let questinName = $('input[name="question_name"]').val()
+		let content = $('input[name="question_desc"]').val()
+		if(questinName == ''){
+			alert('请填写题库名称')
+			return false;
+		}
+		if(content == ''){
+			alert('请填写题库描述')
+			return false;
+		}
+		if(ids.length == 0){
+			let rand = []
+			let m = parseInt(prompt('请输入随机生成题库的资源数量：',''))
+			if(m == '' || m == '0' || parseInt(m)>res_id_list.length){
+				alert('数量输入错误,生成题库失败')
+			}
+			if(parseInt(m) == res_id_list.length){
+				ids_str = res_id_list.join(',')
+			}else{
+				let min = 0
+				let max = res_id_list.length
+				while(m){
+					let tnpp = 0
+					tnpp = Math.floor(Math.random()*(max-min)+min)
+					while(rand.indexOf(tnpp) != -1){
+						tnpp = Math.floor(Math.random()*(max-min+1)+min)
+					}
+					rand.push(tnpp)
+					m--
+				}
+				for(let p in rand){
+					ids.push(res_id_list[rand[p]])
+				}
+				ids_str = ids.join(',')
+			}
+		}
+		$.ajax({
+				url: saveResRef_api_address,
+				type: "post",
+				dataType: 'json',
+				data:JSON.stringify({userId:parseInt(user_id),content:content,questionName:questinName,resIds:ids_str}),
+				contentType:'application/json; charset=utf-8',
+				success: function (data) {
+					if(data.code == 200){
+						alert('生成题库成功')
+					}
+				},
+				error:function(){
+					alert('系统错误，生成题库失败')
+				}
+			})
+	})
+	$('body').on('click','.detail_btn',function(e){
+		let o = $(e.target)
+		let did = o.attr('did')
+		console.log(did)
+		window.location.href = 'res_detail.html?res_id='+did
+	})
+	$('body').on('click','.audit_btn',function(e){
+		let o = $(e.target)
+		if(confirm('确认通过审核')){
+			$.ajax({
+				url: update_api_address,
+				type: "post",
+				data: JSON.stringify({id:parseInt(o.attr('did')),auditStatus:"1"}),
+				dataType: 'json',
+				contentType:'application/json; charset=utf-8',
+				success: function (data) {
+					if( data.code=='200' ){
+						console.log(data.data)
+						o.hide()
+						alert('审核成功')
+					}else{
+						alert('审核失败')
+					}
+			  },
+			  error:function(e){
+			  console.log(update_api_address)
+			  console.log(e)
+				alert('审核失败,网络错误')
+			  }
+			})
+		}
+		
+	})
+			$('body').on('click','.del_btn',function(e){
+			let o = $(e.target)
+			$.ajax({
+            url: update_api_address,
+            type: "post",
+            data: JSON.stringify({id:o.attr('did'),isDel:'1'}),
+            dataType: 'json',
+			contentType:'application/json; charset=utf-8',
+            success: function (data) {
+                if( data.code=='200' ){
+					o.parent().parent().remove()
+					alert('删除成功')
+					
+				}else{
+					alert('删除失败')
+				}
+			  }
+			})
+		})
+		var query_cache = {securityLevel:'',expiryDate:'',resType:''}
+		$('.param_c').click(function(){
+			let o = $(this)
+			o.css({'background':'silver'}).siblings().css({'background':'unset'})
+			query_cache[o.parent().attr('dtype')] = o.attr('value')
+			let paramm = {}
+			for(let p in query_cache){
+				if(query_cache[p] != ''){
+					paramm[p] = query_cache[p]
+				}
+			}
+			paramm.isDel = 0
+			$.ajax({
+            url: get_all_res_api_address,
+            type: "post",
+            data: JSON.stringify(paramm),
+            dataType: 'json',
+			contentType:'application/json; charset=utf-8',
+            success: function (data) {
+                if( data.code=='200' ){
+				let d = data.data.resList
+					let h = ''
+					for (let p in d){
+						h+='<li class="text">'
+						h+='<input type="checkbox" name="res_single" value="'+d[p].res.id+'"><a href="javascript:void(0)" style="overflow:unset;">'+d[p].res.resName+'</a>'
+						h+='</li>'
+					}
+					$('.res_container').html(h)
+				}else{
+					alert('获取资源失败')
+				}
+			  }
+			})
+		})
+</script>
+</body>
+</html>
+<style>
+	.search_area{
+		padding : 5px 5px 5px 5px;
+	}
+	.search_area div{
+		margin:3px 0px 3px 0px;
+	}
+	.param_c{
+		color:blue;
+		cursor:pointer;
+		margin-right:10px;
+	}
+</style>

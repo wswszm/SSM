@@ -1,0 +1,120 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>非实物资产管理中心</title>
+	<link rel="stylesheet" href="css/style1.css" type="text/css" media="all"/>
+</head>
+
+<body>
+<div id="hearder2" class="clearfix">
+	<div class="logo-name">非实物资产管理中心</div>
+	<div class="form-tools">
+	</div>
+</div>
+<div id="menu-box" class="clearfix">
+	<ul>
+	</ul>
+</div>
+<div id="detail2-box" class="clearfix" style="background:none;">
+    <div class="content-box" style="width:100%;float:none;padding:0px;">
+    	<h1>资源列表</h1>
+        <ul class="res_container">
+        </ul>
+    </div>
+</div>
+</div>
+<script src="js/jquery-1.8.3.min.js"></script>
+<script src="js/common.js"></script>
+<script>
+	var user_id = sessionStorage.getItem('id')
+	var get_all_res_api_address = window.location.origin+'/res/sys_res/selectList'
+	var saveResRef_api_address = window.location.origin+'/res/sys_res/saveResRef'
+	var update_api_address = window.location.origin+'/res/sys_res/update'
+	authCheck()
+	renderHeader($('#menu-box ul'),sessionStorage.getItem('roleEnName'))
+	//获取
+		//获取所you资源
+	$.ajax({
+            url: get_all_res_api_address,
+            type: "post",
+            data: JSON.stringify({isDel:0}),
+            dataType: 'json',
+			contentType:'application/json; charset=utf-8',
+            success: function (data) {
+                if( data.code=='200' ){
+				let d = data.data.resList
+					let h = ''
+					for (let p in d){
+						h+='<li class="text">'
+						h+='<a href="res_detail.html?res_id='+d[p].res.id+'">'+d[p].res.resName+'</a>'
+						h+='<span>'
+						if(d[p].res.auditStatus == 0){
+							h+='<button class="audit_btn" type="button" did="'+d[p].res.id+'" style="cursor:pointer;">审核</button>'
+						}
+						h+='<button class="detail_btn" type="button" did="'+d[p].res.id+'" style="cursor:pointer;" >详情</button>'
+						h+='<button class="del_btn" type="button" did="'+d[p].res.id+'" style="cursor:pointer;" >删除</button>'
+						h+='</span>'
+						h+='</li>'
+					}
+					$('.res_container').html(h)
+				}else{
+					alert('获取资源失败')
+				}
+          }
+        })
+	$('body').on('click','.detail_btn',function(e){
+		let o = $(e.target)
+		let did = o.attr('did')
+		console.log(did)
+		window.location.href = 'res_detail.html?res_id='+did
+	})
+	$('body').on('click','.audit_btn',function(e){
+		let o = $(e.target)
+		if(confirm('确认通过审核')){
+			$.ajax({
+				url: update_api_address,
+				type: "post",
+				data: JSON.stringify({id:parseInt(o.attr('did')),auditStatus:"1"}),
+				dataType: 'json',
+				contentType:'application/json; charset=utf-8',
+				success: function (data) {
+					if( data.code=='200' ){
+						console.log(data.data)
+						o.hide()
+						alert('审核成功')
+					}else{
+						alert('审核失败')
+					}
+			  },
+			  error:function(e){
+			  console.log(update_api_address)
+			  console.log(e)
+				alert('审核失败,网络错误')
+			  }
+			})
+		}
+		
+	})
+			$('body').on('click','.del_btn',function(e){
+			let o = $(e.target)
+			$.ajax({
+            url: update_api_address,
+            type: "post",
+            data: JSON.stringify({id:o.attr('did'),isDel:'1'}),
+            dataType: 'json',
+			contentType:'application/json; charset=utf-8',
+            success: function (data) {
+                if( data.code=='200' ){
+					o.parent().parent().remove()
+					alert('删除成功')
+					
+				}else{
+					alert('删除失败')
+				}
+			  }
+			})
+		})
+</script>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>非实物资产管理中心</title>
+	<link rel="stylesheet" href="css/style1.css" type="text/css" media="all"/>
+</head>
+
+<body>
+<div id="hearder2" class="clearfix">
+	<div class="logo-name">非实物资产管理中心</div>
+	<div class="form-tools">
+	</div>
+</div>
+<div id="menu-box" class="clearfix">
+	<ul>
+	</ul>
+</div>
+
+<!-- detail -->
+<div id="detail2-box" class="clearfix" style="background: none;">
+	<div class="content-box" style="width:100%;float:left">
+		<div class="search_area">
+			<div dtype="securityLevel"> 
+				<span>授课学科：</span>
+				<span class="param_c" value="">全部</span>
+				<span class="param_c" value="语文">语文</span>
+				<span class="param_c" value="数学">数学</span>
+				<span class="param_c" value="英语">英语</span>
+			</div>
+			<div dtype="expiryDate">
+				<span>授课年级：</span>
+				<span class="param_c" value="">全部</span>
+				<span class="param_c" value="1">一年级</span>
+				<span class="param_c" value="2">二年级</span>
+				<span class="param_c" value="3">三年级</span>
+			</div>
+			<div dtype="resType">
+				<span>资源类型：</span>
+				<span class="param_c" value="">全部</span>
+				<span class="param_c" value="2">ppt</span>
+				<span class="param_c" value="3">video</span>
+				<span class="param_c" value="1">word</span>
+			</div>
+		<div>
+		<ul class="clearfix res_container" style=" width:100%;float: left;">
+		</ul>
+	</div>
+</div>
+<script src="js/jquery-1.8.3.min.js"></script>
+<script src="js/jquery.page.js"></script>
+<script src="js/common.js"></script>
+<script>
+	var query_cache = {securityLevel:'',expiryDate:'',resType:''}
+	var user_id = sessionStorage.getItem('id')
+	var get_all_res_api_address = window.location.origin+'/res/sys_res/selectList'
+	var saveResRef_api_address = window.location.origin+'/res/sys_res/saveResRef'
+	authCheck()
+	renderHeader($('#menu-box ul'),sessionStorage.getItem('roleEnName'))
+    $(".tcdPageCode").createPage({
+        pageCount:100,
+        current:1,
+        backFn:function(p){
+            //console.log(p);
+        }
+    });
+	//获取所you资源
+	$.ajax({
+            url: get_all_res_api_address,
+            type: "post",
+            data: JSON.stringify({isDel:0,auditStatus:1}),
+            dataType: 'json',
+			contentType:'application/json; charset=utf-8',
+            success: function (data) {
+		
+                if( data.code=='200' ){
+				let d = data.data.resList
+					let h = ''
+					for (let p in d){
+						h+='<li class="pic">'
+						h+='<div class="img-box">'
+						h+='<a href="res_detail.html?res_id='+d[p].res.id+'">'
+						h+='<img src="'+window.location.origin+d[p].sysImgPath.resPath+'">'
+						h+='</a>'
+						h+='</div>'
+						h+='<h3><a href="res_detail.html?res_id='+d[p].res.id+'">'+d[p].res.resName+'</a></h3>'
+						h+='</li>'
+					}
+					$('.res_container').html(h)
+				}else{
+					alert('获取资源失败')
+				}
+          }
+        })
+		$('.param_c').click(function(){
+			let o = $(this)
+			o.css({'background':'silver'}).siblings().css({'background':'unset'})
+			query_cache[o.parent().attr('dtype')] = o.attr('value')
+			let paramm = {}
+			for(let p in query_cache){
+				if(query_cache[p] != ''){
+					paramm[p] = query_cache[p]
+				}
+			}
+			paramm.isDel = 0
+			$.ajax({
+            url: get_all_res_api_address,
+            type: "post",
+            data: JSON.stringify(paramm),
+            dataType: 'json',
+			contentType:'application/json; charset=utf-8',
+            success: function (data) {
+                if( data.code=='200' ){
+				let d = data.data.resList
+					let h = ''
+					for (let p in d){
+						h+='<li class="pic">'
+						h+='<div class="img-box">'
+						h+='<a href="res_detail.html?res_id='+d[p].res.id+'">'
+						h+='<img src="'+window.location.origin+d[p].sysImgPath.resPath+'">'
+						h+='</a>'
+						h+='</div>'
+						h+='<h3><a href="res_detail.html?res_id='+d[p].res.id+'">'+d[p].res.resName+'</a></h3>'
+						h+='</li>'
+					}
+					$('.res_container').html(h)
+				}else{
+					alert('获取资源失败')
+				}
+          }
+        })
+		
+		})
+</script>
+
+</body>
+</html>
+<style>
+	.search_area{
+		padding : 5px 5px 5px 5px;
+	}
+	.search_area div{
+		margin:3px 0px 3px 0px;
+	}
+	.param_c{
+		color:blue;
+		cursor:pointer;
+		margin-right:10px;
+	}
+</style>

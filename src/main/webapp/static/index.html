@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>非实物资产管理中心</title>
+<link rel="stylesheet" href="css/style1.css" type="text/css" media="all"/>
+<script src="js/jquery-1.8.3.min.js"></script>
+<script src="js/common.js?s=123"></script>
+
+</head>
+
+<body>
+<div id="hearder2" class="clearfix">
+  <div class="logo-name">非实物资产管理中心</div>
+  <div class="form-tools">
+   	  <form id="search" name="search" method="post">
+      	<div class="" style="height: 40px;">
+        </div>
+        <!--<div class="search-box">
+            <input type="text" name="textfield" id="textfield" class="input-text" placeholder="请输入搜索关键词">
+            <input type="image" src="images/search.png" class="input-submit" />
+        </div>-->
+  	  </form>
+    </div>
+</div>
+<div id="menu-box" class="clearfix">
+	<ul>
+    </ul>
+</div>
+<div id="slider-box" style="background:url(images/slider1.jpg) center center;"></div>
+<!-- index1-div2 -->
+<div id="index1-div2" class="clearfix">
+	<div class="index1-left675" style="width: 100%;" >
+    	<div class="index1-li-box" style="width: 100%;">
+            <div class="index1-left330 res_container" style="width: 100%;">
+                <div class="title-box">资源列表<a href="resource_list.html" class="title-more" title="查看更多"><img src="images/12.gif"></a></div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script>
+var user_id = sessionStorage.getItem('id')
+	var get_all_res_api_address = '/res/sys_res/selectList'
+	var saveResRef_api_address = window.location.origin+'/res/sys_res/saveResRef'
+	authCheck()
+	renderHeader($('#menu-box ul'),sessionStorage.getItem('roleEnName'))
+	
+		$.ajax({
+            url: get_all_res_api_address,
+            type: "post",
+            data: JSON.stringify({isDel:0,auditStatus:1}),
+            dataType: 'json',
+			contentType:'application/json; charset=utf-8',
+            success: function (data) {
+                if( data.code=='200' ){
+					let d = data.data.resList
+					let h = ''
+					let i = 0
+					for (let p in d){
+						i++
+						if(i>6) {
+							//break
+						}
+						let time = new Date(d[p].res.createDate);
+						let y = time.getFullYear();
+						let m = time.getMonth()+1;
+						let dd = time.getDate();
+						h+='<div style="display: inline-block">'
+						h+='<img src="'+window.location.origin+d[p].sysImgPath.resPath+'" style="width:330px; height:140px; margin:5px 0;">'
+						h+=' <li><a href="res_detail.html?res_id='+d[p].res.id+'">'+d[p].res.resName+'</a><span>'+y+'-'+m+'-'+dd+'</span></li>'
+						h+='</div>'
+					}
+					$('.res_container').append(h)
+				}else{
+					alert('获取资源失败')
+				}
+          }
+        })
+</script>
+
